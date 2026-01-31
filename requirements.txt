@@ -1,0 +1,5 @@
+pytubefix==10.3.6
+spotipy==2.25.2
+youtube-search==2.2.0
+mutagen==1.47.0
+dotenv==0.9.9
