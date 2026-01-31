@@ -46,6 +46,7 @@ def playlist_all_tracks(id):
 
 
 def download_playlist(id):
+    global track_list
     if id:
         print(f"Spipper is preparing playlist " + playlist_name(id))
         
@@ -84,7 +85,9 @@ def download_playlist(id):
                     spip.id_track(OUTPUT_FOLDER + "playlists/" + playlist_name(id) + "/" + str(i + 1) + ". " + track['name'] + " - " + track['artists'][0]['name'] + ".m4a", track)
                     i += 1
                 else:
-                    print(track['name'] + " is a local file. Skipping...")
+                    del track_list[i]
+                    continue
+
             except Exception as e:
                 print(f"Failed to download " + query + f" skipping...", str(e))
                 i += 1
