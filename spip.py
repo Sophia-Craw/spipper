@@ -16,9 +16,9 @@ def id_track(file, track, idx, length):
 
     path = Path(file)
 
-    while not path.exists():
+    if not path.exists():
 
-        print("WARN: File not created before ID3 attempt. This should be resolve in the second pass.")
+        print("WARN: The ID3 data did not save. This may be resolve in the second pass.")
         return
 
 
