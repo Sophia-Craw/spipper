@@ -1,3 +1,10 @@
+# What is Spipper?
+Spipper is a tool that lets you take ownership of your music on Spotify.
+
+If you are tired of having to pay indefinitely for your music and can't quite leave the collection you've curated over the many years of using Spotfy, this tool is for you.
+
+***THE MISUSAGE OF THIS TOOL TO OBTAIN MEDIA THAT YOU DO NOT OWN OR HAVE NOT ALREADY LISTENED TO REGULARLY AND/OR HAVE HAD ADDED BEFORE IS NOT CONDONED***
+
 # How To Setup
 
 All you will need in terms of prerequisits are a Spotify API client ID and secret.
