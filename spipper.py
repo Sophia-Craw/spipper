@@ -8,8 +8,9 @@ import os
 import requests
 import spip
 from pathlib import Path
-from pathvalidate import sanitize_filename, sanitize_filepath
+from pathvalidate import sanitize_filepath
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -31,6 +32,27 @@ def playlist_name(id):
     result = sp.playlist(id)
     return sanitize_filepath(result['name'])
 
+def validate_name(name):
+    emoj = re.compile("["           # Strip special chars
+        u"\U0001F600-\U0001F64F"  
+        u"\U0001F300-\U0001F5FF"
+        u"\U0001F680-\U0001F6FF"
+        u"\U0001F1E0-\U0001F1FF"  
+        u"\U00002500-\U00002BEF"  
+        u"\U00002702-\U000027B0"
+        u"\U000024C2-\U0001F251"
+        u"\U0001f926-\U0001f937"
+        u"\U00010000-\U0010ffff"
+        u"\u2640-\u2642" 
+        u"\u2600-\u2B55"
+        u"\u200d"
+        u"\u23cf"
+        u"\u23e9"
+        u"\u231a"
+        u"\ufe0f"
+        u"\u3030"
+                      "]+", re.UNICODE)
+    return re.sub(emoj, '', name)
 
 track_list = []
 
@@ -64,7 +86,7 @@ def download_playlist(id):
         playlist_all_tracks(id)
         while i < len(track_list):
             track = track_list[i]['track']
-            file = sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a")
+            file = validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a")
 
             # if track was already downloaded. Skip it.
             if i < len(existing_files):
@@ -85,9 +107,9 @@ def download_playlist(id):
             # Download and save the audio stream
             try:
                 if not track['is_local']:
-                    yt.streams.get_audio_only("mp4").download(OUTPUT_FOLDER + "playlists/" + playlist_name(id), sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a"))
+                    yt.streams.get_audio_only("mp4").download(OUTPUT_FOLDER + "playlists/" + playlist_name(id), validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a"))
                     print(query + f" DONE")
-                    spip.id_track(OUTPUT_FOLDER + "playlists/" + playlist_name(id) + "/" + sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a"), track, i + 1, len(track_list))
+                    spip.id_track(OUTPUT_FOLDER + "playlists/" + playlist_name(id) + "/" + validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a"), track, i + 1, len(track_list))
                     i += 1
                 else:
                     del track_list[i]
@@ -100,7 +122,7 @@ def download_playlist(id):
         print("Doing second ID3 pass...")
         for idx, item in enumerate(track_list):
             track = item['track']
-            spip.id_track(OUTPUT_FOLDER + "playlists/" + playlist_name(id) + "/" + sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a"), track, idx + 1, len(track_list))
+            spip.id_track(OUTPUT_FOLDER + "playlists/" + playlist_name(id) + "/" + validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a"), track, idx + 1, len(track_list))
             print(str(idx + 1) + "/" + str(len(track_list)) + " rescanned.")
     
         print("ALL DONE")
@@ -123,8 +145,8 @@ def download_single(id):
         
         # Download
         try:
-            yt.streams.get_audio_only("mp4").download(OUTPUT_FOLDER + "singles", sanitize_filename(result['name']) + " - " + sanitize_filename(result['artists'][0]['name'] + ".m4a"))
-            spip.id_track(OUTPUT_FOLDER + "singles/" + sanitize_filename(result['name']) + " - " + sanitize_filename(result['artists'][0]['name'] + ".m4a"), result, 1, 1)
+            yt.streams.get_audio_only("mp4").download(OUTPUT_FOLDER + "singles", validate_name(result['name']) + " - " + validate_name(result['artists'][0]['name'] + ".m4a"))
+            spip.id_track(OUTPUT_FOLDER + "singles/" + validate_name(result['name']) + " - " + validate_name(result['artists'][0]['name'] + ".m4a"), result, 1, 1)
             print("DONE")
 
         except Exception as e:
@@ -183,8 +205,8 @@ def download_album(id):
             print("Track", str(idx + 1) + ":", "Beginning download...")
             yt = YouTube(url)
             try:
-                yt.streams.get_audio_only("mp4").download(OUTPUT_FOLDER + "albums/" + album_name(id), sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a"))
-                spip.id_track(OUTPUT_FOLDER + "albums/" + album_name(id) + "/" + sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a"), track, idx + 1, len(result['items']))
+                yt.streams.get_audio_only("mp4").download(OUTPUT_FOLDER + "albums/" + album_name(id), validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a"))
+                spip.id_track(OUTPUT_FOLDER + "albums/" + album_name(id) + "/" + validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a"), track, idx + 1, len(result['items']))
                 print(query + f" DONE")
             except Exception as e:
                 print(f"Failed to download " + query + f" skipping...", str(e))
@@ -198,7 +220,7 @@ def download_album(id):
             track['album']['name'] = albname
             track['album']['images'] = albart
 
-            spip.id_track(OUTPUT_FOLDER + "albums/" + album_name(id) + "/" + sanitize_filename(track['name']) + " - " + sanitize_filename(track['artists'][0]['name'] + ".m4a"), track, idx + 1, len(result['items']))
+            spip.id_track(OUTPUT_FOLDER + "albums/" + album_name(id) + "/" + validate_name(track['name']) + " - " + validate_name(track['artists'][0]['name'] + ".m4a"), track, idx + 1, len(result['items']))
             print(str(idx + 1) + "/" + str(len(result['items'])) + " rescanned.")
     
         print("ALL DONE")
