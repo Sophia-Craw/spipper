@@ -13,6 +13,7 @@ All you will need in terms of prerequisits are a Spotify API client ID and secre
 You can obtain these by creating an API app at: https://developer.spotify.com/
 
 There, you must log in and head to the __developer portal__ where you can then create an API app which will generate both a client ID and secret for you.
+***Make sure WebAPI access is checked at the bottom of the app creation form!***
 
 Once you've obtained these create a `.env` file in the same directory (folder) that the `spipper` binary exists in.
 
