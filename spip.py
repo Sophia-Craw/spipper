@@ -4,6 +4,13 @@
 from mutagen.mp4 import MP4, MP4Cover, error
 import requests
 from pathlib import Path
+import spotipy
+from spipper import sp
+
+def get_genre(artist_id):
+
+    result = sp.artist(artist_id)
+    return result['genres'][0] if result['genres'] else "No Genre"
 
 def id_track(file, track, idx, length):
 
@@ -21,6 +28,7 @@ def id_track(file, track, idx, length):
     song["\xa9alb"] = [track['album']['name']]
     song['\xa9ART'] = [track['artists'][0]['name']]
     song['trkn'] = [(idx, length)]
+    song['\xa9gen'] = [get_genre(track['artists'][0]['id'])]
 
     response = requests.get(track['album']['images'][0]['url'])
 
