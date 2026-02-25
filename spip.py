@@ -5,7 +5,7 @@ from mutagen.mp4 import MP4, MP4Cover, error
 import requests
 from pathlib import Path
 
-def id_track(file, track):
+def id_track(file, track, idx, length):
 
     path = Path(file)
 
@@ -20,6 +20,7 @@ def id_track(file, track):
     song["\xa9nam"] = [track['name']]
     song["\xa9alb"] = [track['album']['name']]
     song['\xa9ART'] = [track['artists'][0]['name']]
+    song['trkn'] = [(idx, length)]
 
     response = requests.get(track['album']['images'][0]['url'])
 
