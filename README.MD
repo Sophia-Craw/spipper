@@ -5,6 +5,8 @@ If you are tired of having to pay indefinitely for your music and can't quite le
 
 ***THE MISUSAGE OF THIS TOOL TO OBTAIN MEDIA THAT YOU DO NOT OWN OR HAVE NOT ALREADY LISTENED TO REGULARLY AND/OR HAVE HAD ADDED BEFORE IS NOT CONDONED***
 
+***IT IS ENCOURAGED THAT YOU REBUILD YOUR LIBRARY OVER TIME AND SUPPORT ARTISTS ON PLATFORMS SUCH AS [BANDCAMP](https://bandcamp.com)***
+
 # How To Setup
 
 All you will need in terms of prerequisits are a Spotify API client ID and secret.
