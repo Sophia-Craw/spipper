@@ -24,11 +24,14 @@ def id_track(file, track, idx, length):
 
     song = MP4(file)
 
+    track_id = track['id']
+
     song["\xa9nam"] = [track['name']]
     song["\xa9alb"] = [track['album']['name']]
     song['\xa9ART'] = [track['artists'][0]['name']]
-    song['trkn'] = [(idx, length)]
+    song['trkn']    = [(idx, length)]
     song['\xa9gen'] = [get_genre(track['artists'][0]['id'])]
+    song["\xa9cmt"] = [track_id]
 
     response = requests.get(track['album']['images'][0]['url'])
 
