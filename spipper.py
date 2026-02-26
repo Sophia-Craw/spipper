@@ -21,11 +21,11 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
     client_secret=os.getenv("CLIENT_SECRET")
 ), requests_timeout=20, retries=20)
 
-folder_path = Path("./output")
+OUTPUT_FOLDER = "./output/"
+
+folder_path = Path(OUTPUT_FOLDER)
 
 folder_path.mkdir(parents=True, exist_ok=True)
-
-OUTPUT_FOLDER = "./output/"
 
 def playlist_name(id):
     # Gets playlist name and returns it
