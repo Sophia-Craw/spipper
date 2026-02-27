@@ -22,7 +22,7 @@ def id_track(file, track, idx, length):
 
         if not path.exists():
 
-            print("WARN: The ID3 data did not save. This may be resolve in the second pass.")
+            print("WARN: The ID3 data did not save.")
             return
 
 
