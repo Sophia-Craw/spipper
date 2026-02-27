@@ -16,9 +16,7 @@ def get_genre(artist_id):
 def id_track(file, track, idx, length):
 
     try:
-        sanitized_file = sanitize_filepath(validate_name(file))
-
-        path = Path(sanitized_file)
+        path = Path(file)
 
         if not path.exists():
 
