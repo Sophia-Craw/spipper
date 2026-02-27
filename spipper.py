@@ -27,10 +27,6 @@ folder_path = Path(OUTPUT_FOLDER)
 
 folder_path.mkdir(parents=True, exist_ok=True)
 
-def playlist_name(id):
-    # Gets playlist name and returns it
-    result = sp.playlist(id)
-    return sanitize_filepath(result['name'])
 
 def validate_name(name):
     emoj = re.compile("["           # Strip special chars
@@ -53,6 +49,12 @@ def validate_name(name):
         u"\u3030"
                       "]+", re.UNICODE)
     return re.sub(emoj, '', name)
+
+
+def playlist_name(id):
+    # Gets playlist name and returns it
+    result = sp.playlist(id)
+    return sanitize_filepath(validate_name(result['name']))
 
 track_list = []
 
@@ -158,7 +160,7 @@ def download_single(id):
 
 def album_name(id):
     result = sp.album(id)
-    return sanitize_filepath(result['name'])
+    return sanitize_filepath(validate_name(result['name']))
 
 def cover_art(id):
     result = sp.album(id)
